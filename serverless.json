@@ -1,0 +1,36 @@
+{
+  "service": "serverless-demo-s3",
+  "frameworkVersion": "3",
+  "configValidationMode": "error",
+  "plugins":["serverless-dotenv-plugin"],
+
+  "provider": {
+    "name": "aws",
+    "iam": {
+      "role": {
+        "statements": [
+          { "Effect": "Allow", "Action": "s3:*", "Resource": "*" },
+          {
+            "Effect": "Allow",
+            "Action": ["s3:GetObject", "s3:PutObject"],
+            "Resource": ["arn:aws:s3:::file-uploads-bucket-s3/*"]
+          }
+        ]
+      }
+    },
+    "runtime": "nodejs16.x",
+    "region": "ap-south-1",
+    "deploymentMethod": "direct",
+    "memorySize": 128
+  },
+  "functions": {
+    "fileUpload": {
+      "handler": "src/fileUpload.fileUploadHandler",
+      "events": [
+        {
+          "httpApi": "POST /upload"
+        }
+      ]
+    }
+  }
+}
