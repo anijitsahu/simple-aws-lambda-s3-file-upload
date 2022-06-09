@@ -21,7 +21,6 @@ export async function fileUploadHandler(event) {
       Body: fileContents,
     };
     const result = await s3Ops.send(new PutObjectCommand(params));
-
     return {
       statusCode: 200,
       body: JSON.stringify(

@@ -11,7 +11,11 @@
         "statements": [
           {
             "Effect": "Allow",
-            "Action": ["s3:ListAllMyBuckets", "s3:ListBucket", "s3:CreateBucket"],
+            "Action": [
+              "s3:ListAllMyBuckets",
+              "s3:ListBucket",
+              "s3:CreateBucket"
+            ],
             "Resource": "*"
           },
           {
