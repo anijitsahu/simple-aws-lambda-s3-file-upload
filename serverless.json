@@ -39,6 +39,14 @@
           "httpApi": "POST /upload"
         }
       ]
+    },
+    "listContents": {
+      "handler": "src/listContents.listContentsHandler",
+      "events": [
+        {
+          "httpApi": "GET /getcontents"
+        }
+      ]
     }
   }
 }
