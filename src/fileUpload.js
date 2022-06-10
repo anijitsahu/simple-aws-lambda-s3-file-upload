@@ -1,7 +1,12 @@
+// AWS SDK dependencies
 import { ListBucketsCommand, PutObjectCommand } from "@aws-sdk/client-s3";
+
+// local dependencies
 import { s3Ops } from "./libs/s3Client.js";
 import { checkIfBucketExists } from "./helpers/checkBucketExists.js";
 import { createBucket } from "./helpers/createBucket.js";
+import { sendResponse } from "./helpers/sendResponse.js";
+
 export async function fileUploadHandler(event) {
   const { fileName, fileContents } = JSON.parse(event.body);
   try {
@@ -28,6 +33,7 @@ export async function fileUploadHandler(event) {
           buckets: data.Buckets,
           ifBucketExist,
           bucketCreated,
+          result,
           uploadedFile: {
             fileName,
             bucketName: process.env.FILE_UPLOAD_BUCKET,
@@ -38,13 +44,7 @@ export async function fileUploadHandler(event) {
       ),
     };
   } catch (error) {
-    return {
-      statusCode: 500,
-      body: JSON.stringify(
-        { message: "Unable to access the Bucket", error },
-        null,
-        2
-      ),
-    };
+    const res = { message: "Unable to access the Bucket", error };
+    return sendResponse(process.env.ERR_CODE, res);
   }
 }
