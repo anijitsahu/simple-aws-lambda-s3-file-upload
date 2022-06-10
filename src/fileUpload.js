@@ -1,5 +1,5 @@
 // AWS SDK dependencies
-import { ListBucketsCommand, PutObjectCommand } from "@aws-sdk/client-s3";
+import { PutObjectCommand } from "@aws-sdk/client-s3";
 
 // local dependencies
 import { s3Ops } from "./libs/s3Client.js";
@@ -8,9 +8,9 @@ import { createBucket } from "./helpers/createBucket.js";
 import { sendResponse } from "./helpers/sendResponse.js";
 
 export async function fileUploadHandler(event) {
-  const { fileName, fileContents } = JSON.parse(event.body);
+  const { fileName, fileContents, userId } = JSON.parse(event.body);
   try {
-    const data = await s3Ops.send(new ListBucketsCommand({}));
+    // check if the bucket is present
     let ifBucketExist = await checkIfBucketExists(
       process.env.FILE_UPLOAD_BUCKET
     );
@@ -20,31 +20,22 @@ export async function fileUploadHandler(event) {
     if (!ifBucketExist) {
       bucketCreated = await createBucket(process.env.FILE_UPLOAD_BUCKET);
     }
+    // if userId present, create a folder with same and place the file
     const params = {
       Bucket: process.env.FILE_UPLOAD_BUCKET,
-      Key: fileName,
+      Key: userId ? `${userId}/${fileName}` : fileName,
       Body: fileContents,
     };
-    const result = await s3Ops.send(new PutObjectCommand(params));
-    return {
-      statusCode: 200,
-      body: JSON.stringify(
-        {
-          buckets: data.Buckets,
-          ifBucketExist,
-          bucketCreated,
-          result,
-          uploadedFile: {
-            fileName,
-            bucketName: process.env.FILE_UPLOAD_BUCKET,
-          },
-        },
-        null,
-        2
-      ),
+    const uploadResult = await s3Ops.send(new PutObjectCommand(params));
+    const res = {
+      ifBucketExist,
+      bucketCreated,
+      fileUploadStatus: uploadResult["$metadata"].httpStatusCode,
+      uploadedFile: { fileName },
     };
+    return sendResponse(process.env.SUCCESS_CODE, res);
   } catch (error) {
     const res = { message: "Unable to access the Bucket", error };
-    return sendResponse(process.env.ERR_CODE, res);
+    return sendResponse(process.env.ERROR_CODE, res);
   }
 }
