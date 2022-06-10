@@ -2,7 +2,7 @@
   "service": "serverless-demo-s3",
   "frameworkVersion": "3",
   "configValidationMode": "error",
-  "plugins": ["serverless-dotenv-plugin"],
+  "plugins": ["serverless-dotenv-plugin", "serverless-iamroles"],
 
   "provider": {
     "name": "aws",
@@ -11,18 +11,12 @@
         "statements": [
           {
             "Effect": "Allow",
-            "Action": [
-              "s3:ListAllMyBuckets",
-              "s3:ListBucket",
-              "s3:CreateBucket"
-            ],
+            "Action": ["s3:ListAllMyBuckets", "s3:CreateBucket"],
             "Resource": "*"
-          },
-          {
-            "Effect": "Allow",
-            "Action": ["s3:GetObject", "s3:PutObject"],
-            "Resource": ["arn:aws:s3:::file-uploads-bucket-s3/*"]
           }
+        ],
+        "managedPolicies": [
+          "arn:aws:iam::657149196530:policy/ReadWriteObjectsPolicyForABucket"
         ]
       }
     },
@@ -34,17 +28,16 @@
   "functions": {
     "fileUpload": {
       "handler": "src/fileUpload.fileUploadHandler",
-      "events": [
-        {
-          "httpApi": "POST /upload"
-        }
-      ]
+      "events": [{ "httpApi": "POST /upload" }]
     },
     "listContents": {
       "handler": "src/listContents.listContentsHandler",
-      "events": [
+      "events": [{ "httpApi": "GET /getcontents" }],
+      "iamRoleStatements": [
         {
-          "httpApi": "GET /getcontents"
+          "Effect": "Allow",
+          "Action": ["s3:ListBucket"],
+          "Resource": "arn:aws:s3:::file-uploads-bucket-s3"
         }
       ]
     }

@@ -11,7 +11,8 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "serverless-dotenv-plugin": "^4.0.1"
+    "serverless-dotenv-plugin": "^4.0.1",
+    "serverless-iamroles": "^3.2.6"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.105.0"
