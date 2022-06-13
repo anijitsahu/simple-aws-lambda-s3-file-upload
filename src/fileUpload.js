@@ -31,7 +31,10 @@ export async function fileUploadHandler(event) {
       ifBucketExist,
       bucketCreated,
       fileUploadStatus: uploadResult["$metadata"].httpStatusCode,
-      uploadedFile: { fileName },
+      uploadedFile: {
+        fileName,
+        url: `https://${process.env.FILE_UPLOAD_BUCKET}.s3.${process.env.REGION}.${process.env.AMAZON_URL}/${params.Key}`,
+      },
     };
     return sendResponse(process.env.SUCCESS_CODE, res);
   } catch (error) {
