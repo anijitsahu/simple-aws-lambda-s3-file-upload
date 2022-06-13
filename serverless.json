@@ -1,5 +1,5 @@
 {
-  "service": "serverless-demo-s3",
+  "service": "serverless-basics-s3",
   "frameworkVersion": "3",
   "configValidationMode": "error",
   "plugins": ["serverless-dotenv-plugin", "serverless-iamroles"],
