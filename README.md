@@ -30,12 +30,12 @@ To use the code in this example you **must** have an valid [AWS account](https:/
 7. [AWS HTTP API](https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api-develop.html) are using [AWS API GateWay](https://aws.amazon.com/api-gateway/)
 
 <ol start="8">
-   <li> This APIs can also be consumed by any <b>Frontend Application</b>.</li> 
    <li> Basic <a href="https://aws.amazon.com/s3/">AWS S3</a> operations <code>ListBuckets, PutObject, GetObject</code> are supported.</li> 
+   <li> This APIs can also be consumed by any <b>Frontend Application</b>.</li> 
 </ol>  
 
-11. [NPM](https://www.npmjs.com/) dependencies are used for various purposes.
-12. **Custom Headers** are added with the response for *obvious security* reasons.
+10. [NPM](https://www.npmjs.com/) dependencies are used for various purposes.
+11. **Custom Headers** are added with the response for *obvious security* reasons.
 
 ## Usage
 
